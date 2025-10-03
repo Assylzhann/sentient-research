@@ -1,0 +1,21 @@
+name: Weekly Summary
+
+on:
+  schedule:
+    - cron: "0 18 * * 0"  # every Sunday at 18:00 UTC
+  workflow_dispatch:
+
+jobs:
+  send-summary:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Send weekly summary
+        run: |
+          SUMMARY="📊 Weekly Summary ($(date +'%Y-%m-%d')):
+          - Research on open-source AI
+          - Notes about tokenomics
+          - Key highlights of the week"
+          
+          curl -s -X POST https://api.telegram.org/bot${{ secrets.TELEGRAM_BOT_TOKEN }}/sendMessage \
+          -d chat_id=${{ secrets.TELEGRAM_CHAT_ID }} \
+          -d text="$SUMMARY"
