@@ -1,0 +1,31 @@
+name: Weekly Research Summary
+
+on:
+  schedule:
+    - cron: "0 10 * * 1" # run every Monday at 10:00 UTC
+  workflow_dispatch:      # allows manual run
+
+jobs:
+  summary:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Generate weekly summary
+        run: |
+          echo "## Weekly Research Summary" > SUMMARY.md
+          echo "Generated on: $(date)" >> SUMMARY.md
+          echo "" >> SUMMARY.md
+
+          echo "### Recent commits:" >> SUMMARY.md
+          git log --since="7 days ago" --pretty=format:"- %h %s (%an)" >> SUMMARY.md || echo "No commits this week." >> SUMMARY.md
+
+      - name: Commit and push summary
+        run: |
+          git config user.name "github-actions"
+          git config user.email "actions@github.com"
+          git add SUMMARY.md
+          git commit -m "Update weekly summary [skip ci]" || echo "No changes to commit"
+          git push
