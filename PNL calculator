@@ -1,0 +1,47 @@
+{ You enter the buy price, amount invested, sell price (optional), and current price. }
+
+{ The program calculates your profit/loss, plus how much you’d have made if you hadn’t sold. }
+
+
+# PNL calculator: "If I hadn’t sold"
+
+def pnl_if_not_sold(buy_price, buy_amount_usd, sell_price, current_price):
+    # how many tokens you bought
+    tokens = buy_amount_usd / buy_price
+
+    # how much you got when you sold
+    sold_value = tokens * sell_price
+
+    # how much they’d be worth now
+    current_value = tokens * current_price
+
+    # profit when you sold
+    pnl_sold = sold_value - buy_amount_usd
+
+    # profit if you had held
+    pnl_now = current_value - buy_amount_usd
+
+    # missed profit (difference)
+    missed_profit = pnl_now - pnl_sold
+
+    print("📊 Results:")
+    print(f"— Tokens bought: {tokens:.2f}")
+    print(f"— Profit when sold: ${pnl_sold:.2f}")
+    print(f"— Profit if held: ${pnl_now:.2f}")
+    print(f"— Missed profit: ${missed_profit:.2f}")
+
+# 🧮 Example:
+buy_price = 0.1
+buy_amount_usd = 100
+sell_price = 0.377
+current_price = 0.45  # Current token price
+
+pnl_if_not_sold(buy_price, buy_amount_usd, sell_price, current_price)
+
+
+📊 Results:
+— Tokens bought: 1000.00
+— Profit when sold: $277.00
+— Profit if held: $350.00
+— Missed profit: $73.00
+
